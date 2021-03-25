@@ -8,15 +8,15 @@ Both networks are adapted to CIFAR-10 dataset and built in PyTorch. Requirements
 ### Full parseable arguments list for hypsearch.py
 
 hyp_search:
-  --LR_Ds [LR_DS [LR_DS ...]]
+  --LR_Ds [LR_DS [LR_DS ...]]<br/>
                         LR_D list 1, usage example "--LR_Ds 0.0001 0.0002
                         0.0004"
                         
-  --LR_Gs [LR_GS [LR_GS ...]]
+  --LR_Gs [LR_GS [LR_GS ...]]<br/>
                         LR_G list 2, usage example "--LR_Gs 0.0001 0.0002
                         0.0004"
                         
-  --SEEDS [SEEDS [SEEDS ...]]
+  --SEEDS [SEEDS [SEEDS ...]]<br/>
                         SEED list, usage example "--SEEDS 4242 4343 4444"
                        
 
