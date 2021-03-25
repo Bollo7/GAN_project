@@ -65,4 +65,4 @@ gan_hyps:<br/>
   
   --dataset<br/>     Dataset name
   
-  ###$ Separate jupyter notebook gan_eval.ipynb for aggregation of logs and visualization of training process is also provided
+  #### Separate jupyter notebook gan_eval.ipynb for aggregation of logs and visualization of training process is also provided
