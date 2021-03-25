@@ -11,11 +11,14 @@ hyp_search:
   --LR_Ds [LR_DS [LR_DS ...]]
                         LR_D list 1, usage example "--LR_Ds 0.0001 0.0002
                         0.0004"
+                        
   --LR_Gs [LR_GS [LR_GS ...]]
                         LR_G list 2, usage example "--LR_Gs 0.0001 0.0002
                         0.0004"
+                        
   --SEEDS [SEEDS [SEEDS ...]]
                         SEED list, usage example "--SEEDS 4242 4343 4444"
+                       
 
 gan_hyps:
   --gan_type {GAN,WGAN}
