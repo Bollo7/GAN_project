@@ -45,22 +45,22 @@ gan_hyps:<br/>
   --NUMBER_CHANNELS NUMBER_CHANNELS<br/>
                         The number of input channels
                         
-  --N_EPOCHS N_EPOCHS   The number of epochs to run
+  --N_EPOCHS N_EPOCHS<br/>   The number of epochs to run
   
-  --B1 B1               Beta 1
+  --B1 B1<br/>               Beta 1
   
-  --B2 B2               Beta 2
+  --B2 B2<br/>               Beta 2
   
   --VECTOR_LEN VECTOR_LEN<br/>
                         The number of epochs to run
                         
-  --C C                 Clipping value
+  --C C<br/>                 Clipping value
   
-  --save_dir SAVE_DIR   Directory name to save pictures to
+  --save_dir SAVE_DIR<br/>   Directory name to save pictures to
   
-  --result_dir RESULT_DIR
+  --result_dir RESULT_DIR<br/>
                         Directory name to save generated images to
                         
-  --log_dir LOG_DIR     Directory name to save training logs to
+  --log_dir LOG_DIR<br/>     Directory name to save training logs to
   
-  --dataset DATASET     Dataset name
+  --dataset DATASET<br/>     Dataset name
