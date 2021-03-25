@@ -52,7 +52,7 @@ gan_hyps:<br/>
   --B2 B2<br/>               Beta 2
   
   --VECTOR_LEN VECTOR_LEN<br/>
-                        The number of epochs to run
+                        The number of images to pass for FID calculation (both for real and fake samples)
                         
   --C C<br/>                 Clipping value
   
