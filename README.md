@@ -24,43 +24,45 @@ gan_hyps:<br/>
   --gan_type {GAN,WGAN}<br/>
                         The type of GAN
                         
-  --BATCH_SIZE BATCH_SIZE<br/>
+  --BATCH_SIZE<br/>
                         The size of batch
                         
-  --IMAGE_SIZE IMAGE_SIZE<br/>
+  --IMAGE_SIZE<br/>
                         The size of input image
                         
-  --INPUT_NOISE INPUT_NOISE<br/>
+  --INPUT_NOISE<br/>
                         Input noise for generator
                         
-  --GENERATOR_FILTERS GENERATOR_FILTERS<br/>
+  --GENERATOR_FILTERS<br/>
                         The size of convolution filters of G
                         
-  --DISCRIMINATOR_FILTERS DISCRIMINATOR_FILTERS<br/>
+  --DISCRIMINATOR_FILTERS<br/>
                         The size of convolution filters of D
                         
-  --KERNEL_SIZE KERNEL_SIZE<br/>
+  --KERNEL_SIZE<br/>
                         The size of kernel for convolution layers
                         
-  --NUMBER_CHANNELS NUMBER_CHANNELS<br/>
+  --NUMBER_CHANNELS<br/>
                         The number of input channels
                         
-  --N_EPOCHS N_EPOCHS<br/>   The number of epochs to run
+  --N_EPOCHS<br/>   The number of epochs to run
   
-  --B1 B1<br/>               Beta 1
+  --B1<br/>               Beta 1
   
-  --B2 B2<br/>               Beta 2
+  --B2<br/>               Beta 2
   
-  --VECTOR_LEN VECTOR_LEN<br/>
+  --VECTOR_LEN<br/>
                         The number of images to pass for FID calculation (both for real and fake samples)
                         
-  --C C<br/>                 Clipping value
+  --C<br/>                 Clipping value
   
-  --save_dir SAVE_DIR<br/>   Directory name to save pictures to
+  --save_dir<br/>   Directory name to save pictures to
   
-  --result_dir RESULT_DIR<br/>
+  --result_dir<br/>
                         Directory name to save generated images to
                         
-  --log_dir LOG_DIR<br/>     Directory name to save training logs to
+  --log_dir<br/>     Directory name to save training logs to
   
-  --dataset DATASET<br/>     Dataset name
+  --dataset<br/>     Dataset name
+  
+  ###$ Separate jupyter notebook gan_eval.ipynb for aggregation of logs and visualization of training process is also provided
