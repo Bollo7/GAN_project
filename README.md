@@ -1,8 +1,8 @@
 # GAN_project
 
-### Bachelor Thesis project dedicated to fine-tuning of learning rates for two GAN variations - DCGAN and WGAN
+### Bachelor Thesis project dedicated to optimal hyperparameter search for two GAN variations - DCGAN and WGAN
 
-Both networks are adapted to CIFAR-10 dataset and built in PyTorch. Requirements file will be uploaded soon. Even though search space is limited, it is possible to extend it in future work. Additionally, both networks are evaluated with FID after each epoch.
+Both networks are adapted to CIFAR-10 dataset and built using PyTorch framework. Requirements file will be uploaded soon. This project also features automatic FID evaluation after each epoch. All logs, results and generated images for particular choice of network and hyperparameters are stored in separate folders. After training, it is possible to aggregate results, visualizee training process, as well as summarize performance of GANs by using *eval.ipynb* notebook.
 
 <details>
 <summary>### Full parseable arguments list for hypsearch.py</summary>
@@ -67,5 +67,3 @@ gan_hyps:<br/>
 
 </details>
 
-
-  #### Separate jupyter notebook gan_eval.ipynb for aggregation, analysis and visualization of results is also provided.
