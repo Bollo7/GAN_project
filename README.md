@@ -2,7 +2,7 @@
 
 ### Bachelor Thesis project dedicated to optimal hyperparameter search for two GAN variations - DCGAN and WGAN
 
-Both networks are adapted to CIFAR-10 dataset and built using PyTorch framework. However, it is possible to modify code in order to use project for the dataset of choice. Requirements file will be uploaded soon. This project also features automatic FID evaluation after each epoch. All logs, results and generated images for particular choice of network and hyperparameters are stored in separate folders. After training, it is possible to aggregate results, visualizee training process, as well as summarize performance of GANs by using *eval.ipynb* notebook.
+Both networks are adapted for training on CIFAR-10 dataset and built using PyTorch framework. However, it is possible to modify code in order to use project for the dataset of choice. Requirements file will be uploaded soon. This project also features automatic FID evaluation after each epoch. All logs, results and generated images for particular choice of network and hyperparameters are stored in separate folders. After training, it is possible to aggregate results, visualizee training process, as well as summarize performance of GANs by using *eval.ipynb* notebook.
 
 <details>
 <summary>### Full parseable arguments list for hypsearch.py</summary>
