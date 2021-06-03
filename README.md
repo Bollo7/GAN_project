@@ -56,7 +56,7 @@ gan_hyps:<br/>
                         
   --C<br/>                 Clipping value
   
-  --save_dir<br/>   Directory name to save pictures to
+  --save_dir<br/>   Directory name to save training checkpoints to
   
   --result_dir<br/>
                         Directory name to save generated images to
