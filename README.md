@@ -4,9 +4,9 @@
 
 Both networks are adapted to CIFAR-10 dataset and built in PyTorch. Requirements file will be uploaded soon. Even though search space is limited, it is possible to extend it in future work. Additionally, both networks are evaluated with FID after each epoch.
 
-
-### Full parseable arguments list for hypsearch.py
-
+<details>
+<summary>### Full parseable arguments list for hypsearch.py</summary>
+<br>
 hyp_search:<br/>
   --LR_Ds [LR_DS [LR_DS ...]]<br/>
                         LR_D list 1, usage example "--LR_Ds 0.0001 0.0002
@@ -64,5 +64,8 @@ gan_hyps:<br/>
   --log_dir<br/>     Directory name to save training logs to
   
   --dataset<br/>     Dataset name
-  
-  #### Separate jupyter notebook gan_eval.ipynb for aggregation of logs and visualization of training process is also provided
+
+</details>
+
+
+  #### Separate jupyter notebook gan_eval.ipynb for aggregation, analysis and visualization of results is also provided.
