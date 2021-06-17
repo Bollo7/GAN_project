@@ -186,7 +186,7 @@ class GAN(object):
 			for batch_idx, data in enumerate(self.train_loader):
 
 				self.D.zero_grad()
-				x_real, y_real = data[0], (torch.ones(self.BATCH_SIZE) * 0.9)  # lower the confidence for D on real
+				x_real, y_real = data[0], (torch.ones(self.BATCH_SIZE))
 				x_real, y_real = x_real.to(self.DEVICE), y_real.to(self.DEVICE)
 
 				# loss of D on real imgs
@@ -198,7 +198,7 @@ class GAN(object):
 
 				# train D on fake
 				noise_z = torch.randn(self.BATCH_SIZE, self.INPUT_NOISE, 1, 1).to(self.DEVICE)
-				x_fake, y_fake = self.G(noise_z), (torch.ones(self.BATCH_SIZE) * 0.1).to(self.DEVICE)  # lower confidence for D on fake
+				x_fake, y_fake = self.G(noise_z), (torch.ones(self.BATCH_SIZE)).to(self.DEVICE)
 
 				D_output2 = self.D(x_fake.detach()).view(-1)  # 'detach' to not track the gradients here
 				D_fake_loss = self.criterion(D_output2, y_fake)
