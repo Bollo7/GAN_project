@@ -55,7 +55,8 @@ def w2_mod(v1, v2):
 class WGAN(object):
 	def __init__(self, args):
 
-		self.DEVICE = torch.device('cuda:4' if torch.cuda.is_available() else 'cpu')
+		self.DEVICE = args.DEVICE
+		self.INCEPTION_BATCH_SIZE = args.INCEPTION_BATCH_SIZE
 		self.BATCH_SIZE = args.BATCH_SIZE
 		self.IMAGE_SIZE = args.IMAGE_SIZE
 		self.INPUT_NOISE = args.INPUT_NOISE
@@ -103,6 +104,8 @@ class WGAN(object):
 		torch.manual_seed(self.SEED)
 		# self.params['SEED'] = self.SEED
 		print(f"Current run's seed: {self.SEED}, GAN type: {self.model_name}")
+
+		self.DEVICE = torch.device(f'cuda:{self.DEVICE}' if torch.cuda.is_available() else 'cpu')
 
 		### Create folders, save parameters and define writer ###
 
@@ -164,7 +167,6 @@ class WGAN(object):
 
 
 	def train(self):
-		img_list = []
 		self.train_hist = {}
 		self.train_hist['LR_D'], self.train_hist['LR_G'] = self.LR_D, self.LR_G
 		self.train_hist['D_loss'] = []
@@ -233,19 +235,29 @@ class WGAN(object):
 					      f'Loss D: {D_loss.item():.4f} | Loss G: {D_fake.item():.4f}')
 
 					with torch.no_grad():
+
 						fake = self.G(self.fixed_noise).detach().cpu()
 
 						img_grid_real = torchvision.utils.make_grid(x_real, normalize=True)
 						img_grid_fake = torchvision.utils.make_grid(fake, normalize=True)
 
-						# self.writer_real.add_image('Mnist Real Images', img_grid_real)
-						torchvision.utils.save_image(img_grid_real,
-						                             f'{self.result_dir}/{str(datetime.datetime.now())[:10]}_real_{epoch}_seed{self.SEED}/real_{epoch}_{batch_idx}.png')
-						# self.writer_fake.add_image('Mnist Fake Images', img_grid_fake)
-						torchvision.utils.save_image(img_grid_fake,
-						                             f'{self.result_dir}/{str(datetime.datetime.now())[:10]}_fake_{epoch}_seed{self.SEED}/fake_{epoch}_{batch_idx}.png')
-						plt.imshow(img_grid_fake.permute(1, 2, 0))
-						img_list.append(fake)
+						prefix_real = f'{str(datetime.datetime.now())[:10]}_real_{epoch}_seed{self.SEED}/real_{epoch}_{batch_idx}.png'
+						prefix_fake = f'{str(datetime.datetime.now())[:10]}_fake_{epoch}_seed{self.SEED}/fake_{epoch}_{batch_idx}.png'
+
+						try:
+
+							torchvision.utils.save_image(img_grid_fake,
+														 f'{self.result_dir}/{prefix_fake}')
+
+							torchvision.utils.save_image(img_grid_real,
+														 f'{self.result_dir}/{prefix_real}')
+
+						# plt.imshow(img_grid_fake.permute(1, 2, 0))
+
+						except:
+							print('[ERR] Unexpected error during saving the result images.')
+							continue
+
 
 				self.train_hist['per_epoch_time'].append(time.time() - epoch_start_time)
 				### Calculate FID ###
@@ -267,8 +279,8 @@ class WGAN(object):
 
 						real_vec, fake_vec = torch.cat(reals, dim=0), torch.cat(fakes, dim=0)
 
-						rr = get_activations(real_vec, self.VECTOR_LEN, use_cuda=False)
-						ff = get_activations(fake_vec, self.VECTOR_LEN, use_cuda=False)
+						rr = get_activations(real_vec, self.INCEPTION_BATCH_SIZE, use_cuda=True)
+						ff = get_activations(fake_vec, self.INCEPTION_BATCH_SIZE, use_cuda=True)
 
 						stat = w2_mod(rr, ff)
 

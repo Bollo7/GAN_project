@@ -16,7 +16,7 @@ from inception import *
 import matplotlib.pyplot as plt
 import time
 import numpy.linalg as la
-import scipy
+import scipy.linalg as linalg
 
 
 def w2_mod(v1, v2):
@@ -35,7 +35,7 @@ def w2_mod(v1, v2):
 	norm = la.norm(m1 - m2)
 	#sigmas = np.dot(c1, c2)
 	offset = np.eye(c1.shape[0]) * eps
-	sigmas = scipy.linalg.sqrtm((c1 + offset).dot(c2 + offset))
+	sigmas = linalg.sqrtm((c1 + offset).dot(c2 + offset))
 
 	if np.iscomplexobj(sigmas):
 		if not np.allclose(np.diagonal(sigmas).imag, 0, atol=1e-3):
@@ -54,9 +54,11 @@ def calc_seed(date=str(datetime.datetime.now())):
 	return round(seed)
 
 class GAN(object):
+
 	def __init__(self, args):
 
-		self.DEVICE = torch.device('cuda:4' if torch.cuda.is_available() else 'cpu')
+		self.DEVICE = args.DEVICE
+		self.INCEPTION_BATCH_SIZE = args.INCEPTION_BATCH_SIZE
 		self.BATCH_SIZE = args.BATCH_SIZE
 		self.IMAGE_SIZE = args.IMAGE_SIZE
 		self.INPUT_NOISE = args.INPUT_NOISE
@@ -99,6 +101,8 @@ class GAN(object):
 		torch.manual_seed(self.SEED)
 		# self.params['SEED'] = self.SEED
 		print(f"Current run's seed: {self.SEED}, GAN type: {self.model_name}")
+
+		self.DEVICE = torch.device(f'cuda:{self.DEVICE}' if torch.cuda.is_available() else 'cpu')
 
 		try:
 			os.makedirs(f'{self.log_dir}/WGAN_CIFAR10/test_real{self.SEED}')
@@ -155,7 +159,6 @@ class GAN(object):
 	### Create folders, save parameters and define writer ###
 
 	def train(self):
-		img_list = []
 		self.D_losses, self.G_losses = [], []
 		self.train_hist = {}
 		self.train_hist['LR_D'], self.train_hist['LR_G'] = self.LR_D, self.LR_G
@@ -198,7 +201,7 @@ class GAN(object):
 
 				# train D on fake
 				noise_z = torch.randn(self.BATCH_SIZE, self.INPUT_NOISE, 1, 1).to(self.DEVICE)
-				x_fake, y_fake = self.G(noise_z), (torch.ones(self.BATCH_SIZE)).to(self.DEVICE)
+				x_fake, y_fake = self.G(noise_z), (torch.zeros(self.BATCH_SIZE)).to(self.DEVICE)
 
 				D_output2 = self.D(x_fake.detach()).view(-1)  # 'detach' to not track the gradients here
 				D_fake_loss = self.criterion(D_output2, y_fake)
@@ -236,19 +239,29 @@ class GAN(object):
 					      f'Loss D: {D_loss:.4f} | Loss G: {G_loss:.4f} | D(x): {D_x:.4f} | D(G(z)): {D_G_z:.4f}/{D_G_z2:.4f}')
 
 					with torch.no_grad():
+
 						fake = self.G(self.fixed_noise).detach().cpu()
 
 						img_grid_real = torchvision.utils.make_grid(x_real, normalize=True)
 						img_grid_fake = torchvision.utils.make_grid(fake, normalize=True)
 
-						# self.writer_real.add_image('Mnist Real Images', img_grid_real)
-						torchvision.utils.save_image(img_grid_real,
-						                             f'{self.result_dir}/{str(datetime.datetime.now())[:10]}_real_{epoch}_seed{self.SEED}/real_{epoch}_{batch_idx}.png')
-						# self.writer_fake.add_image('Mnist Fake Images', img_grid_fake)
-						torchvision.utils.save_image(img_grid_fake,
-						                             f'{self.result_dir}/{str(datetime.datetime.now())[:10]}_fake_{epoch}_seed{self.SEED}/fake_{epoch}_{batch_idx}.png')
-						plt.imshow(img_grid_fake.permute(1, 2, 0))
-						img_list.append(fake)
+						prefix_real = f'{str(datetime.datetime.now())[:10]}_real_{epoch}_seed{self.SEED}/real_{epoch}_{batch_idx}.png'
+						prefix_fake = f'{str(datetime.datetime.now())[:10]}_fake_{epoch}_seed{self.SEED}/fake_{epoch}_{batch_idx}.png'
+
+						try:
+
+							torchvision.utils.save_image(img_grid_fake,
+														 f'{self.result_dir}/{prefix_fake}')
+
+							torchvision.utils.save_image(img_grid_real,
+														 f'{self.result_dir}/{prefix_real}')
+
+						# plt.imshow(img_grid_fake.permute(1, 2, 0))
+
+						except:
+							print('[ERR] Unexpected error during saving the result images.')
+							continue
+
 
 				self.train_hist['per_epoch_time'].append(time.time() - epoch_start_time)
 				### Calculate FID ###
@@ -270,8 +283,8 @@ class GAN(object):
 
 						real_vec, fake_vec = torch.cat(reals, dim=0), torch.cat(fakes, dim=0)
 
-						rr = get_activations(real_vec, self.VECTOR_LEN, use_cuda=False)
-						ff = get_activations(fake_vec, self.VECTOR_LEN, use_cuda=False)
+						rr = get_activations(real_vec, self.INCEPTION_BATCH_SIZE, use_cuda=True)
+						ff = get_activations(fake_vec, self.INCEPTION_BATCH_SIZE, use_cuda=True)
 
 						stat = w2_mod(rr, ff)
 

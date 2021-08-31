@@ -5,7 +5,9 @@ import numpy as np
 from PIL import Image
 import torch.nn.functional as F
 
-device = torch.device('cuda:4' if torch.cuda.is_available() else 'cpu')
+import cv2
+
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 # Slightly modified implementation of PyTorch version of code based on original paper's implementation (source: https://github.com/mseitzer/pytorch-fid/blob/master/src/pytorch_fid/fid_score.py)
 # All functions are kept the same, except of minor modifications in get_activations and preprocess_image functions.
@@ -106,13 +108,12 @@ def preprocess_image(im):
 	if im.dtype == np.uint8:
 		im = im.astype(np.float32) / 255
 	im = np.asarray(im, dtype=np.float32)
+	im = cv2.resize(im, (299, 299))
+	im = np.rollaxis(im, axis=2)
 	im = (im - np.min(im)) / np.ptp(im)
+	im *= (1.0 / im.max())
 	im = torch.from_numpy(im)
 	im = torch.autograd.Variable(im, requires_grad=False)
-	im = im.permute(2, 0, 1)
-	im = im.unsqueeze(0)
-	im = F.interpolate(im, 299, mode='bilinear')
-	im = im.squeeze(0)
 	assert im.max() <= 1.0
 	assert im.min() >= 0.0
 	assert im.dtype == torch.float32
